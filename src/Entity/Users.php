@@ -49,6 +49,16 @@ class Users implements  AdvancedUserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $username;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $ninea;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $registre;
     public function getId(): ?int
     {
         return $this->id;
@@ -163,5 +173,29 @@ class Users implements  AdvancedUserInterface
     }
     public function isEnabled(){
         return $this->active;
+    }
+
+    public function getNinea(): ?int
+    {
+        return $this->ninea;
+    }
+
+    public function setNinea(?int $ninea): self
+    {
+        $this->ninea = $ninea;
+
+        return $this;
+    }
+
+    public function getRegistre(): ?string
+    {
+        return $this->registre;
+    }
+
+    public function setRegistre(?string $registre): self
+    {
+        $this->registre = $registre;
+
+        return $this;
     }
 }
