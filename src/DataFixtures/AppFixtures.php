@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Role;
 use App\Entity\Users;
+use App\Entity\Compte;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -44,10 +45,18 @@ class AppFixtures extends Fixture
         $user->setNom("Nom" );
         $user->setActive(true);
         $user->setRole($role1);
-        
-        
-        
+  
          $manager->persist($user);
+        $manager->flush();
+
+
+        $compte = new Compte();
+    
+        $compte->setNumero( "Numero");
+        $compte->setSolde("Solde" );
+        $compte->setActive(true);
+  
+         $manager->persist($compte);
         $manager->flush();
     }
 }

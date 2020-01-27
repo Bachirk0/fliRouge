@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Entity;
+use App\Entity\Depot;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 /**
@@ -59,6 +62,22 @@ class Users implements  AdvancedUserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $registre;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Depot", mappedBy="users")
+     */
+    private $users_depot;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Compte", mappedBy="users")
+     */
+    private $users_compte;
+
+    public function __construct()
+    {
+        $this->users_depot = new ArrayCollection();
+        $this->users_compte = new ArrayCollection();
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -195,6 +214,68 @@ class Users implements  AdvancedUserInterface
     public function setRegistre(?string $registre): self
     {
         $this->registre = $registre;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Depot[]
+     */
+    public function getUsersDepot(): Collection
+    {
+        return $this->users_depot;
+    }
+
+    public function addUsersDepot(Depot $usersDepot): self
+    {
+        if (!$this->users_depot->contains($usersDepot)) {
+            $this->users_depot[] = $usersDepot;
+            $usersDepot->setUsers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsersDepot(Depot $usersDepot): self
+    {
+        if ($this->users_depot->contains($usersDepot)) {
+            $this->users_depot->removeElement($usersDepot);
+            // set the owning side to null (unless already changed)
+            if ($usersDepot->getUsers() === $this) {
+                $usersDepot->setUsers(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Compte[]
+     */
+    public function getUsersCompte(): Collection
+    {
+        return $this->users_compte;
+    }
+
+    public function addUsersCompte(Compte $usersCompte): self
+    {
+        if (!$this->users_compte->contains($usersCompte)) {
+            $this->users_compte[] = $usersCompte;
+            $usersCompte->setUsers($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsersCompte(Compte $usersCompte): self
+    {
+        if ($this->users_compte->contains($usersCompte)) {
+            $this->users_compte->removeElement($usersCompte);
+            // set the owning side to null (unless already changed)
+            if ($usersCompte->getUsers() === $this) {
+                $usersCompte->setUsers(null);
+            }
+        }
 
         return $this;
     }
